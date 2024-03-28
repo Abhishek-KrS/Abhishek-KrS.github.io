@@ -1,4 +1,4 @@
-## Abhishek-KrS.github.io
+## Abhishek-KrS.GitHub.io
 
 Hey there! 
 
