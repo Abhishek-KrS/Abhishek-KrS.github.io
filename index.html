@@ -1,31 +1,124 @@
+html
 <!DOCTYPE html>
 <html>
 <head>
   <title>Abhishek's Portfolio</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    #navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #333;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #navbar ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #navbar ul li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    #navbar ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    #welcome-section {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    #welcome-section h1 {
+      font-size: 48px;
+      color: #333;
+    }
+
+    .project-tile {
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .project-tile h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .project-tile p {
+      color: #666;
+    }
+
+    .project-tile a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 20px;
+      background-color: #333;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 
   <nav id="navbar">
     <ul>
-      <li><a href="#welcome-section">Welcome</a></li>
+      <li><a href="#welcome-section">Home</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="https://github.com/abhishek-krs" target="_blank">Profile</a></li>
+      <li><a href="https://www.github.com/abhishek-krs" target="_blank">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/abhishek" target="_blank">LinkedIn</a></li>
     </ul>
   </nav>
 
   <section id="welcome-section">
     <h1>Welcome to My Portfolio!</h1>
+    <p>I'm Abhishek, a passionate developer based in India.</p>
+    <p>Scroll down to see some of my projects.</p>
   </section>
 
   <section id="projects">
     <div class="project-tile">
       <h2>Project 1</h2>
-      <p>Description of the project.</p>
-      <a href="#">View Project</a>
+      <p>This is a project I developed using HTML, CSS, and JavaScript. It's a responsive website for a fictional coffee shop.</p>
+      <a href="project1.html">View Project</a>
+    </div>
+
+    <div class="project-tile">
+      <h2>Project 2</h2>
+      <p>This is a project I developed using React. It's a weather app that displays the current weather and forecast for a given location.</p>
+      <a href="project2.html">View Project</a>
+    </div>
+
+    <div class="project-tile">
+      <h2>Project 3</h2>
+      <p>This is a project I developed using Python and Django. It's a blog website where users can create, read, update, and delete blog posts.</p>
+      <a href="project3.html">View Project</a>
     </div>
   </section>
 
-  <script src="script.js"></script>
+  <footer>
+    <p>&copy; 2024 Abhishek | All rights reserved.</p>
+  </footer>
+
 </body>
 </html>
