@@ -5,6 +5,23 @@
   <title>Abhishek's Portfolio</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    .light-theme {
+      background-color: #fff;
+      color: #333;
+    }
+
+    .dark-theme {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .serif {
+      font-family: 'Georgia', serif;
+    }
+
+    .sans-serif {
+      font-family: 'Arial', sans-serif;
+    }    
     
     body {
       font-family: Arial, sans-serif;
@@ -129,7 +146,7 @@
     }
   </style>
 </head>
-<body>
+<body class="light-theme serif" id="content">
 
   <nav id="navbar">
     <ul>
@@ -138,6 +155,9 @@
       <li><a href="#algorithms">Algorithms</a></li>
       <li><a href="https://www.github.com/abhishek-krs" target="_blank">GitHub</a></li>
       <li><a href="https://www.linkedin.com/in/abhishek" target="_blank">LinkedIn</a></li>
+      <button onclick="toggleSimplifiedView()"></button>
+      <li><button onclick="changeTheme()">Change Theme</button></li>
+      <li><button onclick="changeFont()">Change Font</button></li>
     </ul>
   </nav>
 
@@ -254,7 +274,22 @@ The Quantum Fourier Transform is a fundamental tool in quantum computing that un
   
   <footer>
     <p><bold>&copy; 2024 Abhishek | All rights reserved.</bold></p>
-  </footer>
+  </footer>    
+  
+  <script>
+    function toggleSimplifiedView() {
+      document.getElementById('content').style.display = 'none';
+    }
+
+    function changeTheme() {
+      document.body.classList.toggle('dark-theme');
+    }
+
+    function changeFont() {
+      document.getElementById('content').classList.toggle('sans-serif');
+    }
+  </script>
+  
 
 </body>
 </html>
