@@ -3,179 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhishek Kumar Singh - Interactive Resume</title>
+    <title>Abhishek Kumar Singh - Interactive Resume Terminal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
         }
         
         body {
-            background: linear-gradient(135deg, #0a0e14, #0d1b2a);
+            background: #0a0e14;
             color: #e6e1cf;
             line-height: 1.6;
             min-height: 100vh;
+            background: linear-gradient(135deg, #0c162d 0%, #0a0e14 100%);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 20px;
+            position: relative;
             overflow-x: hidden;
         }
         
-        .terminal-container {
+        .terminal {
             width: 100%;
-            max-width: 900px;
-            height: 90vh;
-            background: rgba(13, 17, 23, 0.9);
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            max-width: 1000px;
+            background: rgba(13, 17, 23, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 60, 136, 0.3);
             overflow: hidden;
-            border: 1px solid #30363d;
-            position: relative;
+            border: 1px solid #2c5282;
             backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
         .terminal-header {
-            background: linear-gradient(90deg, #161b22, #0d1117);
-            padding: 12px 15px;
+            background: linear-gradient(90deg, #1a365d 0%, #2c5282 100%);
+            padding: 15px 20px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #30363d;
+            border-bottom: 1px solid #3182ce;
+            cursor: move;
+            user-select: none;
         }
         
         .terminal-buttons {
             display: flex;
             gap: 8px;
-            margin-right: 10px;
+            margin-right: 15px;
         }
         
         .terminal-btn {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .terminal-btn:hover {
-            transform: scale(1.1);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: rgba(0,0,0,0.5);
         }
         
         .close-btn { background: #ff5f56; }
+        .close-btn:hover { background: #e0443c; }
+        .close-btn::after { content: '×'; }
+        
         .min-btn { background: #ffbd2e; }
+        .min-btn:hover { background: #e6a926; }
+        .min-btn::after { content: '–'; }
+        
         .max-btn { background: #27c93f; }
+        .max-btn:hover { background: #22b137; }
+        .max-btn::after { content: '□'; }
         
         .terminal-title {
-            color: #8b949e;
-            font-size: 14px;
+            color: #a0d2ff;
+            font-size: 16px;
             flex-grow: 1;
             text-align: center;
             letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         
         .terminal-body {
-            padding: 20px;
-            flex: 1;
+            padding: 30px;
+            height: 70vh;
             overflow-y: auto;
-            position: relative;
+            transition: height 0.3s ease;
+        }
+        
+        .terminal-body.minimized {
+            height: 0;
+            padding: 0;
+            overflow: hidden;
         }
         
         .prompt {
             color: #7ee787;
             margin-bottom: 15px;
+            font-size: 18px;
             display: flex;
             align-items: center;
         }
         
         .prompt span {
             color: #ff7b72;
-            margin-right: 8px;
+            margin-left: 5px;
         }
         
         .command {
             color: #79c0ff;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
             display: flex;
             align-items: center;
-            animation: fadeIn 0.3s ease-out;
         }
         
         .command i {
-            margin-right: 10px;
+            margin-right: 12px;
             color: #e6e1cf;
         }
         
         .output {
-            padding: 15px 0 15px 25px;
-            border-left: 2px solid #30363d;
-            margin: 10px 0 20px 15px;
-            animation: slideIn 0.4s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+            padding: 20px 0 30px 30px;
+            border-left: 2px solid #3182ce;
+            margin: 15px 0 25px 20px;
         }
         
         .section-title {
             color: #ffa657;
-            font-size: 1.4em;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #30363d;
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #2c5282;
             display: flex;
             align-items: center;
-            animation: fadeIn 0.5s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         
         .section-title i {
-            margin-right: 10px;
+            margin-right: 12px;
+            background: rgba(255, 166, 87, 0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ffa657;
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
         }
         
         .info-card {
-            background: rgba(22, 27, 34, 0.7);
-            border: 1px solid #30363d;
+            background: linear-gradient(145deg, #121c30 0%, #0f172a 100%);
+            border: 1px solid #2c5282;
             border-radius: 8px;
             padding: 20px;
-            transition: all 0.3s;
-            animation: fadeIn 0.6s;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
         .info-card:hover {
             transform: translateY(-5px);
-            border-color: #58a6ff;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            background: rgba(22, 27, 34, 0.9);
+            border-color: #4299e1;
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
+        }
+        
+        .info-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4299e1 0%, #3182ce 100%);
         }
         
         .card-title {
-            color: #58a6ff;
+            color: #90cdf4;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            font-size: 1.1em;
+            font-size: 1.3em;
         }
         
         .card-title i {
-            margin-right: 8px;
+            margin-right: 10px;
             color: #7ee787;
         }
         
@@ -185,100 +215,46 @@
         }
         
         .card-content ul {
-            padding-left: 20px;
+            padding-left: 25px;
         }
         
         .card-content li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             position: relative;
         }
         
         .card-content li:before {
-            content: "▹";
-            color: #58a6ff;
+            content: '▹';
+            color: #4299e1;
             position: absolute;
             left: -20px;
+            top: 0;
         }
         
         .tag {
             display: inline-block;
-            background: rgba(31, 111, 235, 0.2);
-            color: #58a6ff;
-            padding: 5px 12px;
+            background: rgba(66, 153, 225, 0.15);
+            color: #90cdf4;
+            padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.9em;
-            margin: 5px;
-            border: 1px solid #58a6ff;
-            transition: all 0.2s;
+            margin: 5px 5px 5px 0;
+            border: 1px solid #3182ce;
+            transition: all 0.2s ease;
         }
         
         .tag:hover {
-            background: rgba(31, 111, 235, 0.4);
-            transform: scale(1.05);
-        }
-        
-        .progress-container {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            height: 12px;
-            margin: 12px 0;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #2ea043, #3fb950);
-            border-radius: 10px;
-        }
-        
-        .input-area {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            background: #161b22;
-            border-top: 1px solid #30363d;
-        }
-        
-        .input-prompt {
-            color: #7ee787;
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-        
-        .command-input {
-            background: transparent;
-            border: none;
-            color: #e6e1cf;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            width: 100%;
-            outline: none;
-            caret-color: #58a6ff;
-        }
-        
-        .help-commands {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .command-name {
-            color: #ffa657;
-        }
-        
-        .command-desc {
-            color: #c9d1d9;
+            background: rgba(66, 153, 225, 0.3);
+            transform: translateY(-2px);
         }
         
         .footer {
             text-align: center;
             margin-top: 30px;
-            color: #8b949e;
-            font-size: 0.9em;
-            padding-top: 15px;
-            border-top: 1px solid #30363d;
+            color: #a0aec0;
+            font-size: 0.95em;
+            padding-top: 20px;
+            border-top: 1px solid #2c5282;
         }
         
         .contact-links {
@@ -290,530 +266,1148 @@
         }
         
         .contact-links a {
-            color: #58a6ff;
+            color: #90cdf4;
             text-decoration: none;
             display: flex;
             align-items: center;
-            transition: all 0.3s;
-        }
-        
-        .contact-links a:hover {
-            color: #7ee787;
-            transform: translateY(-3px);
+            padding: 8px 15px;
+            border-radius: 30px;
+            background: rgba(66, 153, 225, 0.1);
+            border: 1px solid #3182ce;
+            transition: all 0.3s ease;
         }
         
         .contact-links a i {
             margin-right: 8px;
         }
         
-        .blinking-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 20px;
-            background: #58a6ff;
-            margin-left: 5px;
-            animation: blink 1s infinite;
+        .contact-links a:hover {
+            background: rgba(66, 153, 225, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.2);
         }
         
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 15px 0;
         }
         
-        .quantum-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.05;
-            background: url('https://i.imgur.com/rn2c4Zf.png');
-            background-size: cover;
-            background-position: center;
+        .tech-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 15px;
         }
         
-        .active-section {
-            background: rgba(46, 160, 67, 0.1);
-            border-left: 3px solid #2ea043;
+        .tech-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(66, 153, 225, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            border: 1px solid #3182ce;
+        }
+        
+        .tech-icon i {
+            color: #4299e1;
+            font-size: 20px;
         }
         
         @media (max-width: 768px) {
             .terminal-body {
-                padding: 15px;
-            }
-            
-            .terminal-container {
-                height: 95vh;
-            }
-            
-            .section-title {
-                font-size: 1.2em;
+                padding: 20px;
+                height: 65vh;
             }
             
             .info-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .section-title {
+                font-size: 1.4em;
+            }
+        }
+        
+        .blinking-cursor {
+            animation: blink 1s infinite;
+            font-weight: bold;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .java-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #f89820 0%, #d25a00 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .react-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #61dafb 0%, #2a7c8f 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .quantum-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #9d4edd 0%, #5a189a 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .terminal-input {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #161b22;
+            border-top: 1px solid #30363d;
+        }
+        
+        .input-prompt {
+            color: #7ee787;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        #command-input {
+            background: transparent;
+            border: none;
+            color: #e6e1cf;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        
+        .command-history {
+            margin-bottom: 15px;
+        }
+        
+        .command-output {
+            margin-bottom: 20px;
+        }
+        
+        .command-output .output {
+            padding: 10px 0 20px 20px;
+            border-left: 2px solid #4299e1;
+            margin: 10px 0 15px 15px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #2b6cb0 0%, #4299e1 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+        }
+        
+        .command-list {
+            background: rgba(26, 54, 93, 0.3);
+            border: 1px solid #2c5282;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .command-list h3 {
+            color: #90cdf4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .command-list ul {
+            padding-left: 20px;
+        }
+        
+        .command-list li {
+            margin-bottom: 10px;
+            color: #c9d1d9;
+        }
+        
+        .command-list li:before {
+            content: '> ';
+            color: #4299e1;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2b6cb0;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .restore-btn-small {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .restore-btn-small:hover {
+            background: #3182ce;
+        }
+        
+        .floating-restore {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4299e1;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .floating-restore.show {
+            transform: translateY(0);
+        }
+        
+        .project-icon {
+            background: rgba(255, 166, 87, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            border: 1px solid #ffa657;
+        }
+        
+        .project-icon i {
+            color: #ffa657;
+            font-size: 24px;
+        }
+        
+        .project-card-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .badge-container {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="quantum-bg"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-info-circle"></i>
+        <span>Terminal minimized. Click to restore.</span>
+        <button class="restore-btn-small" id="notification-restore">Restore</button>
+    </div>
     
-    <div class="terminal-container">
-        <div class="terminal-header">
+    <div class="floating-restore" id="floating-restore">
+        <i class="fas fa-window-restore"></i>
+        <span>Restore Terminal</span>
+    </div>
+    
+    <div class="terminal" id="terminal">
+        <div class="terminal-header" id="terminal-header">
             <div class="terminal-buttons">
-                <div class="terminal-btn close-btn"></div>
-                <div class="terminal-btn min-btn"></div>
-                <div class="terminal-btn max-btn"></div>
+                <div class="terminal-btn close-btn" id="close-btn"></div>
+                <div class="terminal-btn min-btn" id="min-btn"></div>
+                <div class="terminal-btn max-btn" id="max-btn"></div>
             </div>
-            <div class="terminal-title">Abhishek Kumar Singh | Quantum Software Developer</div>
+            <div class="terminal-title">Abhishek Kumar Singh - Interactive Resume Terminal</div>
         </div>
         
-        <div class="terminal-body" id="terminalOutput">
-            <div class="prompt">
-                <span>resume@abhishek-krs:~$</span> welcome
-            </div>
+        <div class="terminal-body" id="terminal-body">
+            <div class="prompt">resume@abhishek-krs:~$ <span>./welcome.sh</span></div>
+            
+            <div class="command"><i class="fas fa-terminal"></i> Welcome to Abhishek Kumar Singh's Interactive Resume Terminal</div>
             <div class="output">
-                <div class="command">
-                    <i class="fas fa-terminal"></i> Initializing Quantum Developer Resume...
+                <div class="section-title">
+                    <i class="fas fa-user"></i> PERSONAL PROFILE
                 </div>
-                <div class="command">
-                    <i class="fas fa-microchip"></i> Loading quantum modules...
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-id-card"></i> Contact Information</div>
+                        <div class="card-content">
+                            <p><strong>Name:</strong> Abhishek Kumar Singh</p>
+                            <p><strong>Title:</strong> Full Stack Developer (Java Spring Boot & React.js)</p>
+                            <p><strong>Phone:</strong> +91 9024457209</p>
+                            <p><strong>Email:</strong> abhishek-krs@alumni.iith.ac.in</p>
+                            <p><strong>Location:</strong> Delhi-NCR, India</p>
+                            <div class="contact-links">
+                                <a href="https://linkedin.com/in/abhishek-krs" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                <a href="https://abhishek-krs.github.io" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-laptop-code"></i> Professional Summary</div>
+                        <div class="card-content">
+                            <p>Full Stack Developer with expertise in Java Spring Boot and React.js, combining strong backend development skills with modern frontend capabilities. Experienced in building scalable web applications and passionate about implementing efficient solutions. Currently enhancing skills through Java training at CETPA Infotech.</p>
+                            <div class="tech-stack">
+                                <div class="tech-item">
+                                    <div class="tech-icon">
+                                        <i class="fab fa-java"></i>
+                                    </div>
+                                    <div class="tech-label">Java</div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div class="tech-label">Spring Boot</div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon">
+                                        <i class="fab fa-react"></i>
+                                    </div>
+                                    <div class="tech-label">React.js</div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon">
+                                        <i class="fas fa-database"></i>
+                                    </div>
+                                    <div class="tech-label">MySQL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="command">
-                    <i class="fas fa-brain"></i> Neural network activated...
+                
+                <div class="section-title">
+                    <i class="fas fa-brain"></i> TECHNICAL SKILLS
                 </div>
-                <div class="command">
-                    <i class="fas fa-check-circle"></i> System ready! Type 'help' for commands
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-code"></i> Frontend</div>
+                        <div class="card-content">
+                            <span class="tag">React.js</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">React Bootstrap</span>
+                            <span class="tag">Responsive Design</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-server"></i> Backend</div>
+                        <div class="card-content">
+                            <span class="tag">Java</span>
+                            <span class="tag">Spring Boot</span>
+                            <span class="tag">Spring MVC</span>
+                            <span class="tag">Spring Security</span>
+                            <span class="tag">JWT Authentication</span>
+                            <span class="tag">Microservices</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-database"></i> Databases & Tools</div>
+                        <div class="card-content">
+                            <span class="tag">MySQL</span>
+                            <span class="tag">Spring Data JPA</span>
+                            <span class="tag">REST APIs</span>
+                            <span class="tag">Git</span>
+                            <span class="tag">Agile Methodologies</span>
+                            <span class="tag">Problem Solving</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="card-title"><i class="fas fa-language"></i> Languages</div>
+                        <div class="card-content">
+                            <p><strong>English:</strong> Professional proficiency</p>
+                            <p><strong>Japanese:</strong> Intermediate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Projects Section -->
+                <div class="section-title">
+                    <i class="fas fa-project-diagram"></i> PROJECTS
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="badge-container">
+                            <div class="java-badge">Java</div>
+                            <div class="react-badge">React</div>
+                        </div>
+                        <div class="card-title">
+                            <div class="project-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="project-card-content">
+                                Full Stack E-Commerce Application
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Technologies:</strong> React.js, Spring Boot, Spring Security, MySQL</p>
+                            <ul>
+                                <li>Developed using React.js for frontend and Spring Boot for backend</li>
+                                <li>Implemented JWT authentication with Spring Security</li>
+                                <li>Created RESTful APIs for product management and user operations</li>
+                                <li>Integrated MySQL database for persistent data storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="badge-container">
+                            <div class="java-badge">Java</div>
+                            <div class="react-badge">React</div>
+                        </div>
+                        <div class="card-title">
+                            <div class="project-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="project-card-content">
+                                Task Management System
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Technologies:</strong> React.js, Java, Spring Data JPA, React Bootstrap</p>
+                            <ul>
+                                <li>Built with React.js frontend and Java backend</li>
+                                <li>Implemented CRUD operations using Spring Data JPA</li>
+                                <li>Designed responsive UI with React Bootstrap</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="badge-container">
+                            <div class="quantum-badge">Quantum</div>
+                        </div>
+                        <div class="card-title">
+                            <div class="project-icon">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="project-card-content">
+                                Quantum Heatwave Cooler
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Date:</strong> Sep 2023 | Quantum Game Jam</p>
+                            <ul>
+                                <li>Developed a website-based game using Construct</li>
+                                <li>Players face various challenges and puzzles in a quantum physics environment</li>
+                                <li>Implemented quantum physics principles into gameplay mechanics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Experience Section -->
+                <div class="section-title">
+                    <i class="fas fa-briefcase"></i> EXPERIENCE
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="quantum-badge">Excel</div>
+                        <div class="card-title"><i class="fas fa-building"></i> Tech Mahindra, Noida, India</div>
+                        <div class="card-content">
+                            <p><strong>Position:</strong> Trainee Intern</p>
+                            <p><strong>Duration:</strong> Jul 2024 — Present</p>
+                            <ul>
+                                <li>Apprenticeship for GoI project</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="quantum-badge">Quantum</div>
+                        <div class="card-title"><i class="fas fa-globe"></i> QWorld, Poland (Remote)</div>
+                        <div class="card-content">
+                            <p><strong>Position:</strong> QIntern</p>
+                            <p><strong>Duration:</strong> Jul 2024 — Aug 2024</p>
+                            <ul>
+                                <li>Research internship focusing on analysis of hand physical activity</li>
+                                <li>Integrating artificial intelligence and quantum machine learning</li>
+                                <li>Developing algorithms for quantum-enhanced motion analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="java-badge">Java</div>
+                        <div class="card-title"><i class="fas fa-laptop-house"></i> CETPA Infotech, Noida (Remote)</div>
+                        <div class="card-content">
+                            <p><strong>Position:</strong> Java Trainee</p>
+                            <p><strong>Duration:</strong> Jun 2024 — Present</p>
+                            <ul>
+                                <li>Learning core Java concepts and Spring Framework fundamentals</li>
+                                <li>Developing RESTful APIs using Spring Boot</li>
+                                <li>Implementing database connectivity with Spring Data JPA</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <div class="command-history" id="command-history"></div>
+            
+            <div class="terminal-input">
+                <div class="input-prompt">resume:~$</div>
+                <input type="text" id="command-input" placeholder="Type a command (type 'help' for options)" autofocus>
+            </div>
+        </div>
+    </div>
+    
+    <button class="download-btn" id="download-pdf" onclick="window.location.href='https://www.dropbox.com/scl/fi/nfuos8s267oqwibhfjtd1/ABHISHEK-KUMAR-SINGH-resume.pdf?rlkey=zs3x9kgo5rjaa7xj728g3by8a&st=b8fwabse&dl=0';">
+        Download Resume as PDF
+    </button>
+    
+    <div class="command-list">
+        <h3><i class="fas fa-terminal"></i> Available Commands:</h3>
+        <ul>
+            <li><strong>help</strong> - Show available commands</li>
+            <li><strong>experience</strong> - Show professional experience</li>
+            <li><strong>projects</strong> - Show projects</li>
+            <li><strong>publications</strong> - Show publications</li>
+            <li><strong>certifications</strong> - Show certifications</li>
+            <li><strong>education</strong> - Show education</li>
+            <li><strong>contact</strong> - Show contact information</li>
+            <li><strong>clear</strong> - Clear the terminal</li>
+        </ul>
+    </div>
+
+    <!-- Hidden container for PDF generation -->
+    <div id="pdf-content" style="display: none; padding: 30px; background: white; color: #333; font-family: Arial, sans-serif;">
+        <h1 style="text-align: center; margin-bottom: 20px;">Abhishek Kumar Singh</h1>
+        <h2 style="text-align: center; margin-bottom: 30px;">Full Stack Developer (Java Spring Boot & React.js)</h2>
+        
+        <div style="margin-bottom: 30px; text-align: center;">
+            <p>+91 9024457209 | abhishek-krs@alumni.iith.ac.in | Delhi-NCR</p>
+            <p>LinkedIn: linkedin.com/in/abhishek-krs | GitHub: abhishek-krs.github.io</p>
         </div>
         
-        <div class="input-area">
-            <div class="input-prompt">resume@abhishek-krs:~$</div>
-            <input type="text" class="command-input" id="commandInput" autofocus placeholder="Type command...">
-            <div class="blinking-cursor"></div>
+        <h3 style="border-bottom: 2px solid #333; padding-bottom: 5px; margin-bottom: 15px;">PROFESSIONAL SUMMARY</h3>
+        <p>Full Stack Developer with expertise in Java Spring Boot and React.js, combining strong backend development skills with modern frontend capabilities. Experienced in building scalable web applications and passionate about implementing efficient solutions. Currently enhancing skills through Java training at CETPA Infotech.</p>
+        
+        <h3 style="border-bottom: 2px solid #333; padding-bottom: 5px; margin: 30px 0 15px;">EXPERIENCE</h3>
+        <div style="margin-bottom: 20px;">
+            <h4>Trainee Intern</h4>
+            <p>Tech Mahindra, Noida, India | Jul 2024 — Present</p>
+            <ul style="margin-left: 20px;">
+                <li>Apprenticeship for GoI project</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>QIntern</h4>
+            <p>QWorld, Poland (Remote) | Jul 2024 — Aug 2024</p>
+            <ul style="margin-left: 20px;">
+                <li>Research internship focusing on analysis of hand physical activity</li>
+                <li>Integrating artificial intelligence and quantum machine learning</li>
+                <li>Developing algorithms for quantum-enhanced motion analysis</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Java Trainee</h4>
+            <p>CETPA Infotech, Noida (Remote) | Jun 2024 — Present</p>
+            <ul style="margin-left: 20px;">
+                <li>Learning core Java concepts and Spring Framework fundamentals</li>
+                <li>Developing RESTful APIs using Spring Boot</li>
+                <li>Implementing database connectivity with Spring Data JPA</li>
+            </ul>
+        </div>
+        
+        <h3 style="border-bottom: 2px solid #333; padding-bottom: 5px; margin: 30px 0 15px;">PROJECTS</h3>
+        <div style="margin-bottom: 20px;">
+            <h4>Full Stack E-Commerce Application</h4>
+            <p><strong>Technologies:</strong> React.js, Spring Boot, Spring Security, MySQL</p>
+            <ul style="margin-left: 20px;">
+                <li>Developed using React.js for frontend and Spring Boot for backend</li>
+                <li>Implemented JWT authentication with Spring Security</li>
+                <li>Created RESTful APIs for product management and user operations</li>
+                <li>Integrated MySQL database for persistent data storage</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Task Management System</h4>
+            <p><strong>Technologies:</strong> React.js, Java, Spring Data JPA, React Bootstrap</p>
+            <ul style="margin-left: 20px;">
+                <li>Built with React.js frontend and Java backend</li>
+                <li>Implemented CRUD operations using Spring Data JPA</li>
+                <li>Designed responsive UI with React Bootstrap</li>
+            </ul>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h4>Quantum Heatwave Cooler</h4>
+            <p><strong>Date:</strong> Sep 2023 | Quantum Game Jam</p>
+            <ul style="margin-left: 20px;">
+                <li>Developed a website-based game using Construct</li>
+                <li>Players face various challenges and puzzles in a quantum physics environment</li>
+                <li>Implemented quantum physics principles into gameplay mechanics</li>
+            </ul>
+        </div>
+        
+        <h3 style="border-bottom: 2px solid #333; padding-bottom: 5px; margin: 30px 0 15px;">EDUCATION</h3>
+        <div style="margin-bottom: 20px;">
+            <h4>B.Tech in Engineering Physics</h4>
+            <p>Indian Institute of Technology Hyderabad | 2017 - 2021</p>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <h4>Diploma in Quantum Computing</h4>
+            <p>QWorld | 2023 - 2024</p>
         </div>
     </div>
 
     <script>
-        const terminalOutput = document.getElementById('terminalOutput');
-        const commandInput = document.getElementById('commandInput');
+        // Terminal functionality
+        const commandInput = document.getElementById('command-input');
+        const commandHistory = document.getElementById('command-history');
+        const terminalBody = document.getElementById('terminal-body');
+        const minBtn = document.getElementById('min-btn');
+        const maxBtn = document.getElementById('max-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const terminal = document.getElementById('terminal');
+        const terminalHeader = document.getElementById('terminal-header');
+        const notification = document.getElementById('notification');
+        const notificationRestore = document.getElementById('notification-restore');
+        const floatingRestore = document.getElementById('floating-restore');
         
-        // Resume data
-        const resumeData = {
-            personal: {
-                name: "Abhishek Kumar Singh",
-                title: "Quantum Software Developer",
-                phone: "+91902-4457-209",
-                email: "abhishek-krs@alumni.iith.ac.in",
-                location: "Delhi-NCR, India",
-                summary: "Quantum Software Developer specializing in quantum-AI integration and algorithm optimization. Strong background in quantum computing principles with hands-on experience in quantum simulation and quantum machine learning. Seeking research-focused roles in emerging quantum technologies."
-            },
-            skills: {
-                programming: ["C", "C++", "Python", "Java", "JavaScript", "Ruby", "HTML", "CSS", "LaTeX", "MySQL", "Git"],
-                quantum: ["Quantum Machine Learning", "Quantum Algorithm Design", "Quantum Simulation", "AI-Quantum Integration", "IBM Quantum Experience", "Qiskit"],
-                soft: ["Problem Solving", "Time Management", "Adaptability", "Team Leadership", "Technical Communication"]
-            },
-            experience: [
-                {
-                    company: "Tech Mahindra",
-                    role: "Trainee Intern",
-                    period: "Jul 2024 - Present",
-                    location: "Noida, India",
-                    description: "Apprenticeship"
-                },
-                {
-                    company: "QWorld",
-                    role: "QIntern",
-                    period: "Jul 2024 - Aug 2024",
-                    location: "Remote (Poland)",
-                    description: "Research on 2WQC-quantum integration for error correction analysis"
-                },
-                {
-                    company: "IBM",
-                    role: "Quantum Explorer",
-                    period: "Jul 2023 - Feb 2024",
-                    location: "Remote (Spain)",
-                    description: "Unlocked 7 space-exploration achievements ahead of 91.1% participants"
-                },
-                {
-                    company: "Ablution KrS",
-                    role: "Explorer",
-                    period: "Jan 2022 - May 2023",
-                    location: "Remote (India)",
-                    description: "Coordinated interdisciplinary missions for COVID research and G20 Summit"
-                }
-            ],
-            education: [
-                {
-                    institution: "QWorld",
-                    degree: "Diploma in Quantum Computing",
-                    period: "2023 - May 2024",
-                    details: "GPA: 89.17% | Remote (Bosnia)"
-                },
-                {
-                    institution: "Indian Institute of Technology Hyderabad",
-                    degree: "B.Tech in Engineering Physics",
-                    period: "2017 - Jul 2021",
-                    details: "Grade: B | Sangareddy, India"
-                }
-            ],
-            publications: [
-                {
-                    title: "3-SAT for 2WQC",
-                    date: "Oct 2024",
-                    details: "arXiv:submit/5938105",
-                    contributions: [
-                        "Enhanced imperfection models",
-                        "C-OR gate optimization",
-                        "Large depth simulation"
-                    ]
-                }
-            ],
-            projects: [
-                {
-                    name: "Quantum Heatwave Cooler",
-                    event: "Quantum Game Jam",
-                    stack: ["JavaScript", "Construct Engine"],
-                    description: "Web-based quantum puzzle game where players solve physics-based challenges and puzzles with real-time simulation."
-                }
-            ],
-            certifications: [
-                "JavaScript Algorithms - FreeCodeCamp (Mar 2024)",
-                "Foundational C# - Microsoft (Feb 2024)",
-                "Quantum Computing for Natural Sciences - IBM (Sep 2023)",
-                "Twitter for Creatives (Dec 2023)",
-                "Learning LinkedIn (Jul 2022)"
-            ],
-            languages: [
-                { language: "Hindi", proficiency: 100 },
-                { language: "English", proficiency: 70 },
-                { language: "Japanese", proficiency: 30 }
-            ]
-        };
-
-        // Command functions
+        let isMinimized = false;
+        let isClosed = false;
+        let originalPosition = { top: 0, left: 0 };
+        
+        // Command handlers
         const commands = {
             help: () => {
                 return `
-                <div class="output">
-                    <div class="command">
-                        <i class="fas fa-question-circle"></i> Available commands:
-                    </div>
-                    <div class="help-commands">
-                        <div class="command-name">help</div>
-                        <div class="command-desc">Show available commands</div>
-                        
-                        <div class="command-name">clear</div>
-                        <div class="command-desc">Clear terminal screen</div>
-                        
-                        <div class="command-name">about</div>
-                        <div class="command-desc">Show personal information</div>
-                        
-                        <div class="command-name">skills</div>
-                        <div class="command-desc">Display technical skills</div>
-                        
-                        <div class="command-name">experience</div>
-                        <div class="command-desc">Show work experience</div>
-                        
-                        <div class="command-name">education</div>
-                        <div class="command-desc">Show education background</div>
-                        
-                        <div class="command-name">projects</div>
-                        <div class="command-desc">Show projects</div>
-                        
-                        <div class="command-name">publications</div>
-                        <div class="command-desc">List publications</div>
-                        
-                        <div class="command-name">contact</div>
-                        <div class="command-desc">Show contact information</div>
-                        
-                        <div class="command-name">all</div>
-                        <div class="command-desc">Display full resume</div>
-                    </div>
-                </div>
-                `;
-            },
-            
-            clear: () => {
-                terminalOutput.innerHTML = '';
-                return '';
-            },
-            
-            about: () => {
-                return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-user"></i> PERSONAL PROFILE
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-id-card"></i> Contact Information</div>
-                            <div class="card-content">
-                                <p><strong>Name:</strong> ${resumeData.personal.name}</p>
-                                <p><strong>Title:</strong> ${resumeData.personal.title}</p>
-                                <p><strong>Phone:</strong> ${resumeData.personal.phone}</p>
-                                <p><strong>Email:</strong> ${resumeData.personal.email}</p>
-                                <p><strong>Location:</strong> ${resumeData.personal.location}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-laptop-code"></i> Professional Summary</div>
-                            <div class="card-content">
-                                <p>${resumeData.personal.summary}</p>
-                            </div>
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> help</div>
+                        <div class="output">
+                            <p>Available commands:</p>
+                            <ul>
+                                <li><strong>help</strong> - Show available commands</li>
+                                <li><strong>experience</strong> - Show professional experience</li>
+                                <li><strong>projects</strong> - Show projects</li>
+                                <li><strong>publications</strong> - Show publications</li>
+                                <li><strong>certifications</strong> - Show certifications</li>
+                                <li><strong>education</strong> - Show education</li>
+                                <li><strong>contact</strong> - Show contact information</li>
+                                <li><strong>clear</strong> - Clear the terminal</li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-                `;
-            },
-            
-            skills: () => {
-                return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-brain"></i> SKILLS & COMPETENCIES
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-cogs"></i> Programming Languages</div>
-                            <div class="card-content">
-                                ${resumeData.skills.programming.map(skill => `<span class="tag">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-atom"></i> Quantum Technologies</div>
-                            <div class="card-content">
-                                ${resumeData.skills.quantum.map(skill => `<span class="tag">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-people-arrows"></i> Soft Skills</div>
-                            <div class="card-content">
-                                ${resumeData.skills.soft.map(skill => `<span class="tag">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-language"></i> Languages</div>
-                            <div class="card-content">
-                                ${resumeData.languages.map(lang => `
-                                    <p><strong>${lang.language}:</strong> ${lang.proficiency}%</p>
-                                    <div class="progress-container">
-                                        <div class="progress-bar" style="width: ${lang.proficiency}%"></div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 `;
             },
             
             experience: () => {
                 return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-briefcase"></i> PROFESSIONAL EXPERIENCE
-                    </div>
-                    <div class="info-grid">
-                        ${resumeData.experience.map(exp => `
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-building"></i> ${exp.company}</div>
-                                <div class="card-content">
-                                    <p><strong>Position:</strong> ${exp.role}</p>
-                                    <p><strong>Duration:</strong> ${exp.period}</p>
-                                    <p><strong>Location:</strong> ${exp.location}</p>
-                                    <p>${exp.description}</p>
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> experience</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-briefcase"></i> PROFESSIONAL EXPERIENCE
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="quantum-badge">Excel</div>
+                                    <div class="card-title"><i class="fas fa-building"></i> Tech Mahindra, Noida, India</div>
+                                    <div class="card-content">
+                                        <p><strong>Position:</strong> Trainee Intern</p>
+                                        <p><strong>Duration:</strong> Jul 2024 — Present</p>
+                                        <ul>
+                                            <li>Apprenticeship for GoI project</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="quantum-badge">Quantum</div>
+                                    <div class="card-title"><i class="fas fa-globe"></i> QWorld, Poland (Remote)</div>
+                                    <div class="card-content">
+                                        <p><strong>Position:</strong> QIntern</p>
+                                        <p><strong>Duration:</strong> Jul 2024 — Aug 2024</p>
+                                        <ul>
+                                            <li>Research internship focusing on analysis of hand physical activity</li>
+                                            <li>Integrating artificial intelligence and quantum machine learning</li>
+                                            <li>Developing algorithms for quantum-enhanced motion analysis</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="java-badge">Java</div>
+                                    <div class="card-title"><i class="fas fa-laptop-house"></i> CETPA Infotech, Noida (Remote)</div>
+                                    <div class="card-content">
+                                        <p><strong>Position:</strong> Java Trainee</p>
+                                        <p><strong>Duration:</strong> Jun 2024 — Present</p>
+                                        <ul>
+                                            <li>Learning core Java concepts and Spring Framework fundamentals</li>
+                                            <li>Developing RESTful APIs using Spring Boot</li>
+                                            <li>Implementing database connectivity with Spring Data JPA</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="quantum-badge">Quantum</div>
+                                    <div class="card-title"><i class="fab fa-ibm"></i> IBM, Spain (Remote)</div>
+                                    <div class="card-content">
+                                        <p><strong>Position:</strong> Quantum Explorer</p>
+                                        <p><strong>Duration:</strong> Jul 2023 — Feb 2024</p>
+                                        <ul>
+                                            <li>Sought a challenging position in quantum exploration, utilized my knowledge in this cutting-edge technology to unlock 7 space exploration themed achievements ahead of 91.1% participants.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="card-title"><i class="fas fa-rocket"></i> Ablution KrS, India (Remote)</div>
+                                    <div class="card-content">
+                                        <p><strong>Position:</strong> Explorer</p>
+                                        <p><strong>Duration:</strong> Jan 2022 — May 2023</p>
+                                        <ul>
+                                            <li>Interdisciplinary mission for THE COVID IN WORLD and THE G20 SUMMIT in parallel. Worked as a part-time associate, responsible for coordinating and ensuring timely retrieval of information.</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        `).join('')}
+                        </div>
                     </div>
-                </div>
-                `;
-            },
-            
-            education: () => {
-                return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-graduation-cap"></i> EDUCATION
-                    </div>
-                    <div class="info-grid">
-                        ${resumeData.education.map(edu => `
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-university"></i> ${edu.institution}</div>
-                                <div class="card-content">
-                                    <p><strong>Degree:</strong> ${edu.degree}</p>
-                                    <p><strong>Duration:</strong> ${edu.period}</p>
-                                    <p><strong>Details:</strong> ${edu.details}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
                 `;
             },
             
             projects: () => {
                 return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-project-diagram"></i> PROJECTS & ACHIEVEMENTS
-                    </div>
-                    <div class="info-grid">
-                        ${resumeData.projects.map(proj => `
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-gamepad"></i> ${proj.name}</div>
-                                <div class="card-content">
-                                    <p><strong>Event:</strong> ${proj.event}</p>
-                                    <p><strong>Stack:</strong> ${proj.stack.join(', ')}</p>
-                                    <p><strong>Description:</strong> ${proj.description}</p>
-                                </div>
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> projects</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-project-diagram"></i> PROJECTS
                             </div>
-                        `).join('')}
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-award"></i> Certifications</div>
-                            <div class="card-content">
-                                <ul>
-                                    ${resumeData.certifications.map(cert => `<li>${cert}</li>`).join('')}
-                                </ul>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="badge-container">
+                                        <div class="java-badge">Java</div>
+                                        <div class="react-badge">React</div>
+                                    </div>
+                                    <div class="card-title">
+                                        <div class="project-icon">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="project-card-content">
+                                            Full Stack E-Commerce Application
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <p><strong>Technologies:</strong> React.js, Spring Boot, Spring Security, MySQL</p>
+                                        <ul>
+                                            <li>Developed using React.js for frontend and Spring Boot for backend</li>
+                                            <li>Implemented JWT authentication with Spring Security</li>
+                                            <li>Created RESTful APIs for product management and user operations</li>
+                                            <li>Integrated MySQL database for persistent data storage</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="badge-container">
+                                        <div class="java-badge">Java</div>
+                                        <div class="react-badge">React</div>
+                                    </div>
+                                    <div class="card-title">
+                                        <div class="project-icon">
+                                            <i class="fas fa-tasks"></i>
+                                        </div>
+                                        <div class="project-card-content">
+                                            Task Management System
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <p><strong>Technologies:</strong> React.js, Java, Spring Data JPA, React Bootstrap</p>
+                                        <ul>
+                                            <li>Built with React.js frontend and Java backend</li>
+                                            <li>Implemented CRUD operations using Spring Data JPA</li>
+                                            <li>Designed responsive UI with React Bootstrap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="badge-container">
+                                        <div class="quantum-badge">Quantum</div>
+                                    </div>
+                                    <div class="card-title">
+                                        <div class="project-icon">
+                                            <i class="fas fa-gamepad"></i>
+                                        </div>
+                                        <div class="project-card-content">
+                                            Quantum Heatwave Cooler
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <p><strong>Date:</strong> Sep 2023 | Quantum Game Jam</p>
+                                        <ul>
+                                            <li>Developed a website-based game using Construct</li>
+                                            <li>Players face various challenges and puzzles in a quantum physics environment</li>
+                                            <li>Implemented quantum physics principles into gameplay mechanics</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 `;
             },
             
             publications: () => {
                 return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-file-alt"></i> RESEARCH & PUBLICATIONS
-                    </div>
-                    <div class="info-grid">
-                        ${resumeData.publications.map(pub => `
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-book"></i> ${pub.title}</div>
-                                <div class="card-content">
-                                    <p><strong>Date:</strong> ${pub.date}</p>
-                                    <p><strong>Publication:</strong> ${pub.details}</p>
-                                    <p><strong>Contributions:</strong></p>
-                                    <ul>
-                                        ${pub.contributions.map(cont => `<li>${cont}</li>`).join('')}
-                                    </ul>
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> publications</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-file-alt"></i> PUBLICATIONS
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="quantum-badge">Quantum</div>
+                                    <div class="card-title"><i class="fas fa-book"></i> 3-SAT for 2WQC</div>
+                                    <div class="card-content">
+                                        <p><strong>Date:</strong> Oct 2024</p>
+                                        <p><strong>Publication:</strong> arXiv:submit/5938105</p>
+                                        <ul>
+                                            <li>Enhanced Imperfection Models, C-OR Gate Optimization, and Large Depth Simulation</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        `).join('')}
+                        </div>
                     </div>
-                </div>
+                `;
+            },
+            
+            certifications: () => {
+                return `
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> certifications</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-medal"></i> CERTIFICATIONS
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="card-content">
+                                        <ul>
+                                            <li>JavaScript Algorithms and Data Structures (Mar 2024)</li>
+                                            <li>Foundational C# with Microsoft (Feb 2024)</li>
+                                            <li>Twitter for Creatives (Dec 2023)</li>
+                                            <li>Quantum Computing for Natural Sciences (with IBM Quantum) (Sep 2023)</li>
+                                            <li>Typing.com (Jun 2023)</li>
+                                            <li>Learning LinkedIn (2021) (Jul 2022)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            education: () => {
+                return `
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> education</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-graduation-cap"></i> EDUCATION
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="card-title"><i class="fas fa-university"></i> Indian Institute of Technology Hyderabad</div>
+                                    <div class="card-content">
+                                        <p><strong>Degree:</strong> B.Tech in Engineering Physics</p>
+                                        <p><strong>Duration:</strong> 2017 - 2021</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="card-title"><i class="fas fa-certificate"></i> QWorld</div>
+                                    <div class="card-content">
+                                        <p><strong>Degree:</strong> Diploma in Quantum Computing</p>
+                                        <p><strong>Duration:</strong> 2023 - 2024</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 `;
             },
             
             contact: () => {
                 return `
-                <div class="output">
-                    <div class="section-title">
-                        <i class="fas fa-id-badge"></i> CONTACT INFORMATION
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-envelope"></i> Email</div>
-                            <div class="card-content">
-                                <p>${resumeData.personal.email}</p>
+                    <div class="command-output">
+                        <div class="command"><i class="fas fa-terminal"></i> contact</div>
+                        <div class="output">
+                            <div class="section-title">
+                                <i class="fas fa-id-card"></i> CONTACT INFORMATION
                             </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-phone"></i> Phone</div>
-                            <div class="card-content">
-                                <p>${resumeData.personal.phone}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-map-marker-alt"></i> Location</div>
-                            <div class="card-content">
-                                <p>${resumeData.personal.location}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-card">
-                            <div class="card-title"><i class="fas fa-link"></i> Online Profiles</div>
-                            <div class="card-content">
-                                <ul>
-                                    <li><a href="https://linkedin.com/in/abhishek-krs" target="_blank">LinkedIn</a></li>
-                                    <li><a href="https://abhishek-krs.github.io" target="_blank">GitHub Portfolio</a></li>
-                                    <li><a href="https://arxiv.org" target="_blank">arXiv Publications</a></li>
-                                </ul>
+                            
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="card-content">
+                                        <p><strong>Name:</strong> Abhishek Kumar Singh</p>
+                                        <p><strong>Title:</strong> Full Stack Developer (Java Spring Boot & React.js)</p>
+                                        <p><strong>Phone:</strong> +91 9024457209</p>
+                                        <p><strong>Email:</strong> abhishek-krs@alumni.iith.ac.in</p>
+                                        <p><strong>Location:</strong> Delhi-NCR, India</p>
+                                        <div class="contact-links">
+                                            <a href="https://linkedin.com/in/abhishek-krs" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                            <a href="https://abhishek-krs.github.io" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 `;
             },
             
-            all: () => {
-                return commands.about() + 
-                       commands.skills() + 
-                       commands.experience() + 
-                       commands.education() + 
-                       commands.publications() + 
-                       commands.projects() + 
-                       `<div class="footer">
-                            <p>Resume created: July 2025 | Terminal Resume v1.0</p>
-                            <div class="contact-links">
-                                <a href="https://linkedin.com/in/abhishek-krs" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                                <a href="https://abhishek-krs.github.io" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                                <a href="mailto:abhishek-krs@alumni.iith.ac.in"><i class="fas fa-envelope"></i> Email</a>
-                            </div>
-                        </div>`;
+            clear: () => {
+                commandHistory.innerHTML = '';
+                return '';
             }
         };
-
+        
         // Handle command input
         commandInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const command = commandInput.value.trim().toLowerCase();
                 commandInput.value = '';
                 
-                // Add the command to terminal
-                const prompt = document.createElement('div');
-                prompt.className = 'prompt';
-                prompt.innerHTML = `<span>resume@abhishek-krs:~$</span> ${command}`;
-                terminalOutput.appendChild(prompt);
-                
-                // Process the command
-                if (commands[command]) {
-                    const output = commands[command]();
-                    if (output) {
-                        const outputDiv = document.createElement('div');
-                        outputDiv.innerHTML = output;
-                        terminalOutput.appendChild(outputDiv);
+                if (command) {
+                    // Add command to history
+                    commandHistory.innerHTML += `<div class="command-output"><div class="prompt">resume:~$ <span>${command}</span></div></div>`;
+                    
+                    // Process command
+                    if (commands[command]) {
+                        commandHistory.innerHTML += commands[command]();
+                    } else {
+                        commandHistory.innerHTML += `
+                            <div class="command-output">
+                                <div class="command"><i class="fas fa-terminal"></i> ${command}</div>
+                                <div class="output">
+                                    <p>Command not found: ${command}</p>
+                                    <p>Type 'help' for available commands</p>
+                                </div>
+                            </div>
+                        `;
                     }
-                } else if (command) {
-                    const error = document.createElement('div');
-                    error.className = 'output';
-                    error.innerHTML = `<div class="command"><i class="fas fa-exclamation-triangle"></i> Command not found: ${command}. Type 'help' for available commands.</div>`;
-                    terminalOutput.appendChild(error);
+                    
+                    // Scroll to bottom
+                    commandHistory.scrollTop = commandHistory.scrollHeight;
                 }
-                
-                // Scroll to bottom
-                terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
         });
-
-        // Initial help display
-        setTimeout(() => {
-            terminalOutput.innerHTML += commands.help();
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
-        }, 1000);
+        
+        // Download PDF functionality
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin: 10,
+                filename: 'Abhishek_Kumar_Singh_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        });
+        
+        // Terminal button functionality
+        closeBtn.addEventListener('click', () => {
+            terminal.style.transform = 'translateY(100px)';
+            terminal.style.opacity = '0';
+            isClosed = true;
+            
+            setTimeout(() => {
+                terminal.style.display = 'none';
+                floatingRestore.classList.add('show');
+            }, 300);
+        });
+        
+        minBtn.addEventListener('click', () => {
+            if (isMinimized) {
+                // Restore
+                terminalBody.classList.remove('minimized');
+                minBtn.style.backgroundColor = '#ffbd2e';
+                isMinimized = false;
+                notification.classList.remove('show');
+            } else {
+                // Minimize
+                terminalBody.classList.add('minimized');
+                minBtn.style.backgroundColor = '#5c6268';
+                isMinimized = true;
+                
+                // Show notification
+                notification.classList.add('show');
+            }
+        });
+        
+        maxBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (terminal.requestFullscreen) {
+                    terminal.requestFullscreen();
+                } else if (terminal.webkitRequestFullscreen) {
+                    terminal.webkitRequestFullscreen();
+                } else if (terminal.msRequestFullscreen) {
+                    terminal.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        });
+        
+        // Fullscreen change event
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                maxBtn.style.backgroundColor = '#1a8c33';
+            } else {
+                maxBtn.style.backgroundColor = '#27c93f';
+            }
+        });
+        
+        // Terminal header drag functionality
+        let isDragging = false;
+        let offsetX, offsetY;
+        
+        terminalHeader.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('terminal-btn')) return;
+            
+            isDragging = true;
+            offsetX = e.clientX - terminal.getBoundingClientRect().left;
+            offsetY = e.clientY - terminal.getBoundingClientRect().top;
+            terminal.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                terminal.style.left = `${x}px`;
+                terminal.style.top = `${y}px`;
+                terminal.style.position = 'absolute';
+                terminal.style.transform = 'none';
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            terminal.style.cursor = 'default';
+        });
+        
+        // Restore functionality
+        notificationRestore.addEventListener('click', () => {
+            terminalBody.classList.remove('minimized');
+            minBtn.style.backgroundColor = '#ffbd2e';
+            isMinimized = false;
+            notification.classList.remove('show');
+        });
+        
+        floatingRestore.addEventListener('click', () => {
+            terminal.style.display = 'block';
+            terminal.style.transform = 'none';
+            terminal.style.opacity = '1';
+            isClosed = false;
+            floatingRestore.classList.remove('show');
+        });
+        
+        // Initialize terminal position
+        const updatePosition = () => {
+            terminal.style.position = 'relative';
+            terminal.style.left = 'auto';
+            terminal.style.top = 'auto';
+        };
+        
+        window.addEventListener('resize', updatePosition);
+        updatePosition();
     </script>
 </body>
 </html>
