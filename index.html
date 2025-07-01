@@ -1,300 +1,819 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Abhishek's Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .light-theme {
-      background-color: #fff;
-      color: #333;
-    }
-
-    .dark-theme {
-      background-color: #333;
-      color: #fff;
-    }
-
-    .serif {
-      font-family: 'Georgia', serif;
-    }
-
-    .sans-serif {
-      font-family: 'Arial', sans-serif;
-    }    
-    
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
-
-    #navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: #333;
-      padding: 10px;
-      text-align: center;
-    }
-
-    #navbar ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    #navbar ul li {
-      display: inline-block;
-      margin-right: 20px;
-    }
-
-    #navbar ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-    }
-
-    #welcome-section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    #welcome-section h1 {
-      font-size: 48px;
-      color: #333;
-    }
-    
-    .background-image {     
-      background-image: url('https://github.com/Abhishek-KrS/Abhishek-KrS/assets/38554267/87757c4a-f22f-4897-8641-3b0514be2fd2');
-      background-size: cover;     
-      background-position: center;     
-      height: 100vh/* Adjust height as needed */
-      background-color: #000;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    } 
-    
-    .background-image h1 {
-      font-size: 24px;
-      color: #000;
-    }
-
-    .background-image p {
-      color: #000;
-    }
-    
-    .project-tile {
-      background-color: #fff;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .project-tile h2 {
-      font-size: 24px;
-      color: #333;
-    }
-
-    .project-tile p {
-      color: #666;
-    }
-
-    .project-tile a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 20px;
-      background-color: #333;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .algorithm-tile {
-      background-color: #000;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .algorithm-tile h2 {
-      font-size: 24px;
-      color: #666;
-    }
-
-    .algorithm-tile p {
-      color: #333;
-    }
-
-    .algorithm-tile a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 20px;
-      background-color: #fff;
-      color: #333;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .left {
-      text-align: left;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhishek Kumar Singh - Interactive Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0e14, #0d1b2a);
+            color: #e6e1cf;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .terminal-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background: rgba(13, 17, 23, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            border: 1px solid #30363d;
+            position: relative;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .terminal-header {
+            background: linear-gradient(90deg, #161b22, #0d1117);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 10px;
+        }
+        
+        .terminal-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .terminal-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .close-btn { background: #ff5f56; }
+        .min-btn { background: #ffbd2e; }
+        .max-btn { background: #27c93f; }
+        
+        .terminal-title {
+            color: #8b949e;
+            font-size: 14px;
+            flex-grow: 1;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .prompt {
+            color: #7ee787;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .prompt span {
+            color: #ff7b72;
+            margin-right: 8px;
+        }
+        
+        .command {
+            color: #79c0ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .command i {
+            margin-right: 10px;
+            color: #e6e1cf;
+        }
+        
+        .output {
+            padding: 15px 0 15px 25px;
+            border-left: 2px solid #30363d;
+            margin: 10px 0 20px 15px;
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .section-title {
+            color: #ffa657;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: rgba(22, 27, 34, 0.7);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+            animation: fadeIn 0.6s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(22, 27, 34, 0.9);
+        }
+        
+        .card-title {
+            color: #58a6ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+        }
+        
+        .card-title i {
+            margin-right: 8px;
+            color: #7ee787;
+        }
+        
+        .card-content {
+            color: #c9d1d9;
+            line-height: 1.7;
+        }
+        
+        .card-content ul {
+            padding-left: 20px;
+        }
+        
+        .card-content li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .card-content li:before {
+            content: "▹";
+            color: #58a6ff;
+            position: absolute;
+            left: -20px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: rgba(31, 111, 235, 0.2);
+            color: #58a6ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            border: 1px solid #58a6ff;
+            transition: all 0.2s;
+        }
+        
+        .tag:hover {
+            background: rgba(31, 111, 235, 0.4);
+            transform: scale(1.05);
+        }
+        
+        .progress-container {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            height: 12px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2ea043, #3fb950);
+            border-radius: 10px;
+        }
+        
+        .input-area {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #161b22;
+            border-top: 1px solid #30363d;
+        }
+        
+        .input-prompt {
+            color: #7ee787;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #e6e1cf;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            caret-color: #58a6ff;
+        }
+        
+        .help-commands {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .command-name {
+            color: #ffa657;
+        }
+        
+        .command-desc {
+            color: #c9d1d9;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #8b949e;
+            font-size: 0.9em;
+            padding-top: 15px;
+            border-top: 1px solid #30363d;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-links a {
+            color: #58a6ff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .contact-links a:hover {
+            color: #7ee787;
+            transform: translateY(-3px);
+        }
+        
+        .contact-links a i {
+            margin-right: 8px;
+        }
+        
+        .blinking-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: #58a6ff;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .quantum-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background: url('https://i.imgur.com/rn2c4Zf.png');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .active-section {
+            background: rgba(46, 160, 67, 0.1);
+            border-left: 3px solid #2ea043;
+        }
+        
+        @media (max-width: 768px) {
+            .terminal-body {
+                padding: 15px;
+            }
+            
+            .terminal-container {
+                height: 95vh;
+            }
+            
+            .section-title {
+                font-size: 1.2em;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-<body class="light-theme serif" id="content">
-
-  <nav id="navbar">
-    <ul>
-      <li><a href="#welcome-section">Home</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#algorithms">Algorithms</a></li>
-      <li><a href="https://www.github.com/abhishek-krs" target="_blank">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/abhishek" target="_blank">LinkedIn</a></li>
-      <button onclick="toggleSimplifiedView()"></button>
-      <li><button onclick="changeTheme()">Change Theme</button></li>
-      <li><button onclick="changeFont()">Change Font</button></li>
-    </ul>
-  </nav>
-
-
-  <section id="welcome-section" class="background-image">
-    <div class = "project-tile">
-     <h2>Welcome to My Portfolio!</h2>
-     <p>👋 I'm Abhishek (Ablution) Singh, a passionate developer based in India.</p>
-     <a href="resume.html">Go to the Resume Page📜</a>
-    </div>
-  </section>
-  
-  <section id = "details">
+<body>
+    <div class="quantum-bg"></div>
     
-    <div class="background-image">
-      <p>Pic taken at IIT Hyderabad on Wed 28 Apr 18:59:28.</p>
-    </div>
-  
-    <div class="algorithm-tile"> 
-       <h2>Here are some details:</h2>
-       <p class="left">
-        [🔭] I’m currently working on developing quantum software applications for real-world problems.</li><br>
-        [🌱] I’m currently learning advanced quantum algorithms, optimization techniques & quantum programming languages.</li><br>
-        [👯] I’m looking to collaborate on open-source quantum computing projects that push the boundaries of current technology.</li><br>
-        [🤔] I’m looking for help with understanding and implementing quantum error correction codes.</li><br>
-        [💬] Ask me about quantum software development, quantum algorithms, or my experiences at IIT Hyderabad!</li><br>
-        [📫] How to reach me: You can reach me via email at abhishek-krs@alumni.iith.ac.in or connect with me on LinkedIn.com/in/Abhishek-KrS.</li><br>
-        [😄] Pronouns: He/Him/His/Xe</li><br>
-        [⚡] Fun fact: I once attended a quantum computing conference where I got to meet some of the pioneers in the field!</li><br>
-       </p>
-       <a href="https://github.com/Abhishek-KrS#hi-there-">View Profile</a>
-    </div>
-  </section>
-
-  <section id="projects">
-
-    <div class="project-tile">
-      <h2>Project 1</h2>
-      <p>This is a project I developed using HTML, CSS, and JavaScript. It's a responsive website for a fictional coffee shop.</p>
-      <a href="project1.html">View Project</a>
-    </div>
-
-    <div class="project-tile">
-      <h2>Project 2</h2>
-      <p>This is a project I developed using React. It's a weather app that displays the current weather and forecast for a given location.</p>
-      <a href="project2.html">View Project</a>
-    </div>
-
-    <div class="project-tile">
-      <h2>Project 3</h2>
-      <p>This is a project I developed using Python and Django. It's a blog website where users can create, read, update, and delete blog posts.</p>
-      <a href="project3.html">View Project</a>
-    </div>
-  </section>
-
-  <section id="algorithms">
-    <div class="algorithm-tile">
-      <h2>Grover's Algorithm</h2>
-      <p>Grover's Algorithm is a quantum algorithm devised by Lov Grover in 1996. It's a powerful algorithm for searching unsorted databases and provides a quadratic speedup compared to classical algorithms.
-
-In classical computing, searching an unsorted database requires checking each entry one by one, which takes linear time. However, Grover's Algorithm can search an unsorted database in roughly the square root of the number of entries, achieving a quadratic speedup.
-
-The key idea behind Grover's Algorithm is the use of quantum parallelism and quantum interference to amplify the probability of finding the correct solution. It employs the concept of quantum amplitude amplification to enhance the probability amplitudes of the correct answers while suppressing the incorrect ones.
-
-The algorithm consists of two main components: the oracle and the Grover iteration. The oracle marks the solution states, while the Grover iteration applies a series of operations to amplify the probability amplitudes of the marked states.
-
-Grover's Algorithm has various applications, including database search, optimization problems, and cryptography. It's a fundamental quantum algorithm that showcases the power of quantum computing in certain computational tasks.
-
-If you'd like more information or have any specific questions about Grover's Algorithm, feel free to ask! </p>
-      <a href="algorithm1.html">View Algorithm</a>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-btn close-btn"></div>
+                <div class="terminal-btn min-btn"></div>
+                <div class="terminal-btn max-btn"></div>
+            </div>
+            <div class="terminal-title">Abhishek Kumar Singh | Quantum Software Developer</div>
+        </div>
+        
+        <div class="terminal-body" id="terminalOutput">
+            <div class="prompt">
+                <span>resume@abhishek-krs:~$</span> welcome
+            </div>
+            <div class="output">
+                <div class="command">
+                    <i class="fas fa-terminal"></i> Initializing Quantum Developer Resume...
+                </div>
+                <div class="command">
+                    <i class="fas fa-microchip"></i> Loading quantum modules...
+                </div>
+                <div class="command">
+                    <i class="fas fa-brain"></i> Neural network activated...
+                </div>
+                <div class="command">
+                    <i class="fas fa-check-circle"></i> System ready! Type 'help' for commands
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <div class="input-prompt">resume@abhishek-krs:~$</div>
+            <input type="text" class="command-input" id="commandInput" autofocus placeholder="Type command...">
+            <div class="blinking-cursor"></div>
+        </div>
     </div>
 
-    <div class="algorithm-tile">
-      <h2>Shor's Algorithm</h2>
-      <p>Let's delve into Shor's Algorithm. Shor's Algorithm, developed by mathematician Peter Shor in 1994, is a quantum algorithm that revolutionized the field of quantum computing. This algorithm is renowned for its ability to factorize large numbers exponentially faster than classical algorithms, posing a significant threat to classical RSA encryption systems. 
+    <script>
+        const terminalOutput = document.getElementById('terminalOutput');
+        const commandInput = document.getElementById('commandInput');
+        
+        // Resume data
+        const resumeData = {
+            personal: {
+                name: "Abhishek Kumar Singh",
+                title: "Quantum Software Developer",
+                phone: "+91902-4457-209",
+                email: "abhishek-krs@alumni.iith.ac.in",
+                location: "Delhi-NCR, India",
+                summary: "Quantum Software Developer specializing in quantum-AI integration and algorithm optimization. Strong background in quantum computing principles with hands-on experience in quantum simulation and quantum machine learning. Seeking research-focused roles in emerging quantum technologies."
+            },
+            skills: {
+                programming: ["C", "C++", "Python", "Java", "JavaScript", "Ruby", "HTML", "CSS", "LaTeX", "MySQL", "Git"],
+                quantum: ["Quantum Machine Learning", "Quantum Algorithm Design", "Quantum Simulation", "AI-Quantum Integration", "IBM Quantum Experience", "Qiskit"],
+                soft: ["Problem Solving", "Time Management", "Adaptability", "Team Leadership", "Technical Communication"]
+            },
+            experience: [
+                {
+                    company: "Tech Mahindra",
+                    role: "Trainee Intern",
+                    period: "Jul 2024 - Present",
+                    location: "Noida, India",
+                    description: "Apprenticeship"
+                },
+                {
+                    company: "QWorld",
+                    role: "QIntern",
+                    period: "Jul 2024 - Aug 2024",
+                    location: "Remote (Poland)",
+                    description: "Research on 2WQC-quantum integration for error correction analysis"
+                },
+                {
+                    company: "IBM",
+                    role: "Quantum Explorer",
+                    period: "Jul 2023 - Feb 2024",
+                    location: "Remote (Spain)",
+                    description: "Unlocked 7 space-exploration achievements ahead of 91.1% participants"
+                },
+                {
+                    company: "Ablution KrS",
+                    role: "Explorer",
+                    period: "Jan 2022 - May 2023",
+                    location: "Remote (India)",
+                    description: "Coordinated interdisciplinary missions for COVID research and G20 Summit"
+                }
+            ],
+            education: [
+                {
+                    institution: "QWorld",
+                    degree: "Diploma in Quantum Computing",
+                    period: "2023 - May 2024",
+                    details: "GPA: 89.17% | Remote (Bosnia)"
+                },
+                {
+                    institution: "Indian Institute of Technology Hyderabad",
+                    degree: "B.Tech in Engineering Physics",
+                    period: "2017 - Jul 2021",
+                    details: "Grade: B | Sangareddy, India"
+                }
+            ],
+            publications: [
+                {
+                    title: "3-SAT for 2WQC",
+                    date: "Oct 2024",
+                    details: "arXiv:submit/5938105",
+                    contributions: [
+                        "Enhanced imperfection models",
+                        "C-OR gate optimization",
+                        "Large depth simulation"
+                    ]
+                }
+            ],
+            projects: [
+                {
+                    name: "Quantum Heatwave Cooler",
+                    event: "Quantum Game Jam",
+                    stack: ["JavaScript", "Construct Engine"],
+                    description: "Web-based quantum puzzle game where players solve physics-based challenges and puzzles with real-time simulation."
+                }
+            ],
+            certifications: [
+                "JavaScript Algorithms - FreeCodeCamp (Mar 2024)",
+                "Foundational C# - Microsoft (Feb 2024)",
+                "Quantum Computing for Natural Sciences - IBM (Sep 2023)",
+                "Twitter for Creatives (Dec 2023)",
+                "Learning LinkedIn (Jul 2022)"
+            ],
+            languages: [
+                { language: "Hindi", proficiency: 100 },
+                { language: "English", proficiency: 70 },
+                { language: "Japanese", proficiency: 30 }
+            ]
+        };
 
-Shor's Algorithm combines principles of number theory, quantum computing, and Fourier analysis to efficiently factorize large composite numbers into their prime factors. The algorithm leverages quantum parallelism and quantum Fourier transform to perform the factorization task efficiently.
+        // Command functions
+        const commands = {
+            help: () => {
+                return `
+                <div class="output">
+                    <div class="command">
+                        <i class="fas fa-question-circle"></i> Available commands:
+                    </div>
+                    <div class="help-commands">
+                        <div class="command-name">help</div>
+                        <div class="command-desc">Show available commands</div>
+                        
+                        <div class="command-name">clear</div>
+                        <div class="command-desc">Clear terminal screen</div>
+                        
+                        <div class="command-name">about</div>
+                        <div class="command-desc">Show personal information</div>
+                        
+                        <div class="command-name">skills</div>
+                        <div class="command-desc">Display technical skills</div>
+                        
+                        <div class="command-name">experience</div>
+                        <div class="command-desc">Show work experience</div>
+                        
+                        <div class="command-name">education</div>
+                        <div class="command-desc">Show education background</div>
+                        
+                        <div class="command-name">projects</div>
+                        <div class="command-desc">Show projects</div>
+                        
+                        <div class="command-name">publications</div>
+                        <div class="command-desc">List publications</div>
+                        
+                        <div class="command-name">contact</div>
+                        <div class="command-desc">Show contact information</div>
+                        
+                        <div class="command-name">all</div>
+                        <div class="command-desc">Display full resume</div>
+                    </div>
+                </div>
+                `;
+            },
+            
+            clear: () => {
+                terminalOutput.innerHTML = '';
+                return '';
+            },
+            
+            about: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-user"></i> PERSONAL PROFILE
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-id-card"></i> Contact Information</div>
+                            <div class="card-content">
+                                <p><strong>Name:</strong> ${resumeData.personal.name}</p>
+                                <p><strong>Title:</strong> ${resumeData.personal.title}</p>
+                                <p><strong>Phone:</strong> ${resumeData.personal.phone}</p>
+                                <p><strong>Email:</strong> ${resumeData.personal.email}</p>
+                                <p><strong>Location:</strong> ${resumeData.personal.location}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-laptop-code"></i> Professional Summary</div>
+                            <div class="card-content">
+                                <p>${resumeData.personal.summary}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            },
+            
+            skills: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-brain"></i> SKILLS & COMPETENCIES
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-cogs"></i> Programming Languages</div>
+                            <div class="card-content">
+                                ${resumeData.skills.programming.map(skill => `<span class="tag">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-atom"></i> Quantum Technologies</div>
+                            <div class="card-content">
+                                ${resumeData.skills.quantum.map(skill => `<span class="tag">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-people-arrows"></i> Soft Skills</div>
+                            <div class="card-content">
+                                ${resumeData.skills.soft.map(skill => `<span class="tag">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-language"></i> Languages</div>
+                            <div class="card-content">
+                                ${resumeData.languages.map(lang => `
+                                    <p><strong>${lang.language}:</strong> ${lang.proficiency}%</p>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" style="width: ${lang.proficiency}%"></div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            },
+            
+            experience: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-briefcase"></i> PROFESSIONAL EXPERIENCE
+                    </div>
+                    <div class="info-grid">
+                        ${resumeData.experience.map(exp => `
+                            <div class="info-card">
+                                <div class="card-title"><i class="fas fa-building"></i> ${exp.company}</div>
+                                <div class="card-content">
+                                    <p><strong>Position:</strong> ${exp.role}</p>
+                                    <p><strong>Duration:</strong> ${exp.period}</p>
+                                    <p><strong>Location:</strong> ${exp.location}</p>
+                                    <p>${exp.description}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            },
+            
+            education: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-graduation-cap"></i> EDUCATION
+                    </div>
+                    <div class="info-grid">
+                        ${resumeData.education.map(edu => `
+                            <div class="info-card">
+                                <div class="card-title"><i class="fas fa-university"></i> ${edu.institution}</div>
+                                <div class="card-content">
+                                    <p><strong>Degree:</strong> ${edu.degree}</p>
+                                    <p><strong>Duration:</strong> ${edu.period}</p>
+                                    <p><strong>Details:</strong> ${edu.details}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            },
+            
+            projects: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-project-diagram"></i> PROJECTS & ACHIEVEMENTS
+                    </div>
+                    <div class="info-grid">
+                        ${resumeData.projects.map(proj => `
+                            <div class="info-card">
+                                <div class="card-title"><i class="fas fa-gamepad"></i> ${proj.name}</div>
+                                <div class="card-content">
+                                    <p><strong>Event:</strong> ${proj.event}</p>
+                                    <p><strong>Stack:</strong> ${proj.stack.join(', ')}</p>
+                                    <p><strong>Description:</strong> ${proj.description}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-award"></i> Certifications</div>
+                            <div class="card-content">
+                                <ul>
+                                    ${resumeData.certifications.map(cert => `<li>${cert}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            },
+            
+            publications: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-file-alt"></i> RESEARCH & PUBLICATIONS
+                    </div>
+                    <div class="info-grid">
+                        ${resumeData.publications.map(pub => `
+                            <div class="info-card">
+                                <div class="card-title"><i class="fas fa-book"></i> ${pub.title}</div>
+                                <div class="card-content">
+                                    <p><strong>Date:</strong> ${pub.date}</p>
+                                    <p><strong>Publication:</strong> ${pub.details}</p>
+                                    <p><strong>Contributions:</strong></p>
+                                    <ul>
+                                        ${pub.contributions.map(cont => `<li>${cont}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            },
+            
+            contact: () => {
+                return `
+                <div class="output">
+                    <div class="section-title">
+                        <i class="fas fa-id-badge"></i> CONTACT INFORMATION
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-envelope"></i> Email</div>
+                            <div class="card-content">
+                                <p>${resumeData.personal.email}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-phone"></i> Phone</div>
+                            <div class="card-content">
+                                <p>${resumeData.personal.phone}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-map-marker-alt"></i> Location</div>
+                            <div class="card-content">
+                                <p>${resumeData.personal.location}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="card-title"><i class="fas fa-link"></i> Online Profiles</div>
+                            <div class="card-content">
+                                <ul>
+                                    <li><a href="https://linkedin.com/in/abhishek-krs" target="_blank">LinkedIn</a></li>
+                                    <li><a href="https://abhishek-krs.github.io" target="_blank">GitHub Portfolio</a></li>
+                                    <li><a href="https://arxiv.org" target="_blank">arXiv Publications</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            },
+            
+            all: () => {
+                return commands.about() + 
+                       commands.skills() + 
+                       commands.experience() + 
+                       commands.education() + 
+                       commands.publications() + 
+                       commands.projects() + 
+                       `<div class="footer">
+                            <p>Resume created: July 2025 | Terminal Resume v1.0</p>
+                            <div class="contact-links">
+                                <a href="https://linkedin.com/in/abhishek-krs" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                <a href="https://abhishek-krs.github.io" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                                <a href="mailto:abhishek-krs@alumni.iith.ac.in"><i class="fas fa-envelope"></i> Email</a>
+                            </div>
+                        </div>`;
+            }
+        };
 
-The key steps of Shor's Algorithm involve quantum modular exponentiation, quantum Fourier transform, and period finding. By finding the period of a modular function, the algorithm can deduce the factors of a composite number efficiently.
+        // Handle command input
+        commandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim().toLowerCase();
+                commandInput.value = '';
+                
+                // Add the command to terminal
+                const prompt = document.createElement('div');
+                prompt.className = 'prompt';
+                prompt.innerHTML = `<span>resume@abhishek-krs:~$</span> ${command}`;
+                terminalOutput.appendChild(prompt);
+                
+                // Process the command
+                if (commands[command]) {
+                    const output = commands[command]();
+                    if (output) {
+                        const outputDiv = document.createElement('div');
+                        outputDiv.innerHTML = output;
+                        terminalOutput.appendChild(outputDiv);
+                    }
+                } else if (command) {
+                    const error = document.createElement('div');
+                    error.className = 'output';
+                    error.innerHTML = `<div class="command"><i class="fas fa-exclamation-triangle"></i> Command not found: ${command}. Type 'help' for available commands.</div>`;
+                    terminalOutput.appendChild(error);
+                }
+                
+                // Scroll to bottom
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+        });
 
-The implications of Shor's Algorithm are profound, particularly in the field of cryptography. It highlights the potential of quantum computing to break widely used cryptographic schemes, prompting the need for quantum-resistant cryptographic methods.
-
-Shor's Algorithm is a cornerstone in quantum computing and serves as a prime example of the advantage quantum computers hold over classical systems in certain computational tasks. If you have any more questions or need further details about Shor's Algorithm, feel free to ask!</p>
-      <a href="algorithm2.html">View Algorithm</a>
-    </div>
-
-    <div class="algorithm-tile">
-      <h2>Quantum Fourier Transform</h2>
-      <p>Let's explore another fascinating quantum algorithm, the Quantum Fourier Transform (QFT). The Quantum Fourier Transform is a quantum analog of the classical Discrete Fourier Transform (DFT) that plays a crucial role in various quantum algorithms, including Shor's Algorithm.
-
-The Quantum Fourier Transform operates on quantum states and can efficiently transform quantum superposition states into frequency domain states. It allows quantum computers to process information in a manner that classical computers cannot replicate efficiently.
-
-The QFT is essential in quantum algorithms due to its ability to efficiently solve problems related to period finding, amplitude estimation, and quantum phase estimation. It forms the core component of many quantum algorithms by enabling the manipulation of quantum states in a computationally advantageous way.
-
-The algorithmic structure of the Quantum Fourier Transform involves applying a series of quantum gates to quantum states, leading to a transformation that reveals the frequency components of the input state. This transformation is crucial in tasks requiring the analysis of periodicity or frequency content in quantum information.
-
-The Quantum Fourier Transform is a fundamental tool in quantum computing that underpins the functionality of various quantum algorithms. Its efficient operation on quantum states demonstrates the unique capabilities of quantum computers in processing complex information. If you have any more questions about the Quantum Fourier Transform or any other quantum algorithm, feel free to ask!</p>
-      <a href="algorithm3.html">View Algorithm</a>
-    </div>
-  </section>
-
-  <section id="support">
-    <h4>Support</h3>
-  </section>
-
-  <section id="terms-of-service">
-    <h4>Terms of Service</h3>
-  </section>
-
-  <section id="privacy-policy">
-    <h4>Privacy Policy</h3>
-  </section>
-
-  
-  <footer>
-    <p><bold>&copy; 2024 Abhishek | All rights reserved.</bold></p>
-  </footer>    
-  
-  <script>
-    function toggleSimplifiedView() {
-      document.getElementById('content').style.display = 'none';
-    }
-
-    function changeTheme() {
-      document.body.classList.toggle('dark-theme');
-    }
-
-    function changeFont() {
-      document.getElementById('content').classList.toggle('sans-serif');
-    }
-  </script>
-  
-
+        // Initial help display
+        setTimeout(() => {
+            terminalOutput.innerHTML += commands.help();
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, 1000);
+    </script>
 </body>
 </html>
-
